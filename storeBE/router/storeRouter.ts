@@ -1,11 +1,11 @@
-import express from "express"
-import { createProduct, detailedProduct, readProduct } from "../controller/storeController"
-import { upload } from "../utils/multer"
+import express, { Router } from "express";
+import { createProduct, detailedProduct, payment, readProducts } from "../controller/storeController";
 
-const router = express.Router()
+const router = express.Router();
 
-router.route("/view-products").get(readProduct)
-router.route("/create-products").post(upload, createProduct)
+router.route("/view-products").get(readProducts)
+router.route("/make-payment").post(payment)
+router.route("/create-products").post(createProduct)
 router.route("/:productID/product-detail").get(detailedProduct)
 
-export default router
+export default router;

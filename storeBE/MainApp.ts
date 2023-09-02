@@ -1,27 +1,30 @@
-import express, { Application, Request, Response,  NextFunction } from "express"
+import express, { Application, NextFunction, Request, Response} from "express"
 import cors from "cors"
-import { HTTP, mainError } from "./error/mainError"
+import { HTTP, mainError } from "./error/mainError";
+import { handleError } from "./error/handleError";
 import store from "./router/storeRouter"
 
 export const mainApp = (app: Application) => {
     app.use(
         cors({
             origin: "*",
-            methods: ["GET", "POST", "PATCH", "DELETE"],
+            methods: ["GET", "POST", "PATCH", "DELETE"]
         })
-    )
+    );
 
-    app.use(express.json())
+    app.use(express.json());
     app.use("/api/v1", store)
 
-    app.all("*", (req: Request, res: Response, next: NextFunction)=>{
+    app.all("*", (req: Request, reS: Response, next: NextFunction) => {
         next(
             new mainError({
-                name: "Route Error",
-                message: `Route Error due to ${req.originalUrl} doesn't exist`,
+                name: `Router Error`,
+                message: `Router Error: because the page, ${req.originalUrl} doesn't exist`,
                 status: HTTP.BAD_REQUEST,
-                success: false,
+                success: false
             })
         )
     })
+
+    app.use(handleError);
 }
